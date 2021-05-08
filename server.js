@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import config from 'config';
 
 import typeDefs from './graphql/typeDefs.js';
-import resolvers from './graphql/resolvers.js';
+import resolvers from './graphql/resolvers/index.js';
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
