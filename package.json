@@ -7,7 +7,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=local-dev nodemon node server.js"
+    "dev": "cross-env NODE_ENV=local-dev nodemon server.js"
   },
   "dependencies": {
     "apollo-server": "^2.24.0",
