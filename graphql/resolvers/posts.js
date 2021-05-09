@@ -49,9 +49,14 @@ export default {
             if (user) {
                 try {
                     const post = await Post.findById(postId);
-                    if (post && post.username === user.username) {
-                        await post.delete();
-                        return 'Post successfully deleted';
+
+                    if (post) {
+                        if (post.username === user.username) {
+                            await post.delete();
+                            return 'Post successfully deleted';
+                        } else {
+                            throw new Error('You can only delete your own posts');
+                        }
                     } else {
                         throw new Error('Post is not found');
                     }
