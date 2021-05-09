@@ -22,3 +22,5 @@ function validateAuth(context) {
 
     throw new Error('Authentication Error: Token is missing from the request headers');
 }
+
+export default validateAuth;
