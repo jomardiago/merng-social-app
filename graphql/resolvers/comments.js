@@ -45,6 +45,23 @@ export default {
             } else {
                 throw new Error('Post not found');
             }
+        },
+        async likePost(_, { postId }, context) {
+            const user = validateAuth(context);
+            let post = await Post.findById(postId);
+
+            if (post) {
+                let liked = post.likes.find(like => like.username === user.username);
+                if (liked) {
+                    post.likes = post.likes.filter(like => like.username !== user.username);
+                } else {
+                    post.likes.push({ username: user.username, createdAt: new Date().toISOString() });
+                }
+                await post.save();
+                return post;
+            } else {
+                throw new Error('Post not found');
+            }
         }
     }
 };
