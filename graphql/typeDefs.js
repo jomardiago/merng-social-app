@@ -8,6 +8,8 @@ export default gql`
         username: String!
         comments: [Comment]!
         likes: [Like]!
+        commentsCount: Int!
+        likesCount: Int!
     }
     type Comment {
         id: ID!

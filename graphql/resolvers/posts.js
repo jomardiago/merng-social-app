@@ -25,6 +25,10 @@ export default {
     },
     Mutation: {
         async createPost(_, { body }, context) {
+            if (body.trim() === '') {
+                throw new Error('Comment body is required');
+            }
+            
             try {
                 const user = validateAuth(context);
 
