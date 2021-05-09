@@ -1,3 +1,5 @@
+import { AuthenticationError } from 'apollo-server';
+
 import Post from '../../models/Post.js';
 import validateAuth from '../../utils/validateAuth.js';
 
@@ -39,6 +41,25 @@ export default {
                 }
             } catch (error) {
                 throw new Error(error);
+            }
+        },
+        async deletePost(_, { postId }, context) {
+            const user = validateAuth(context);
+
+            if (user) {
+                try {
+                    const post = await Post.findById(postId);
+                    if (post) {
+                        await post.delete();
+                        return 'Post successfully deleted';
+                    } else {
+                        throw new Error('Post is not found');
+                    }
+                } catch (error) {
+                    throw new Error(error);
+                }
+            } else {
+                throw new AuthenticationError('Action is not allowed');
             }
         }
     }
