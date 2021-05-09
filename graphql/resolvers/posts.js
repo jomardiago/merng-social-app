@@ -37,6 +37,7 @@ export default {
                     });
 
                     const post = await newPost.save();
+                    context.pubSub.publish('NEW_POST', { newPost: post });
                     return post;
                 }
             } catch (error) {
@@ -65,6 +66,13 @@ export default {
                 }
             } else {
                 throw new AuthenticationError('Action is not allowed');
+            }
+        }
+    },
+    Subscription: {
+        newPost: {
+            subscribe(_, __, { pubSub }) {
+                return pubSub.asyncIterator('NEW_POST');
             }
         }
     }
