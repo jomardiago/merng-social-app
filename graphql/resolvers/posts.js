@@ -49,7 +49,7 @@ export default {
             if (user) {
                 try {
                     const post = await Post.findById(postId);
-                    if (post) {
+                    if (post && post.username === user.username) {
                         await post.delete();
                         return 'Post successfully deleted';
                     } else {
