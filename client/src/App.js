@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Container } from 'semantic-ui-react';
 
 import HeaderNav from './components/HeaderNav';
 import Home from './pages/Home';
@@ -9,12 +10,14 @@ import 'semantic-ui-css/semantic.min.css';
 import './App.css';
 
 function App() {
-  return (    
+  return (
     <Router>
-      <HeaderNav />
-      <Route exact path='/' component={Home} />
-      <Route exact path='/login' component={Login} />
-      <Route exact path='/register' component={Register} />
+      <Container>
+        <HeaderNav />
+        <Route exact path='/' component={Home} />
+        <Route exact path='/login' component={Login} />
+        <Route exact path='/register' component={Register} />
+      </Container>
     </Router>
   );
 }
