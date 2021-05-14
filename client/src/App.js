@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 
+import { AuthProvider } from './context/auth';
+import AuthRoute from './util/AuthRoute';
+
 import HeaderNav from './components/HeaderNav';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -11,14 +14,16 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
-      <Container>
-        <HeaderNav />
-        <Route exact path='/' component={Home} />
-        <Route exact path='/login' component={Login} />
-        <Route exact path='/register' component={Register} />
-      </Container>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Container>
+          <HeaderNav />
+          <Route exact path='/' component={Home} />
+          <AuthRoute exact path='/login' component={Login} />
+          <AuthRoute exact path='/register' component={Register} />
+        </Container>
+      </Router>
+    </AuthProvider>
   );
 }
 

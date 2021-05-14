@@ -3,14 +3,17 @@ import { Form, Button } from 'semantic-ui-react';
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 
+import { AuthContext } from '../context/auth';
+
 function Login({ history }) {
+    const {login} = React.useContext(AuthContext);
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errors, setErrors] = React.useState({});
 
     const [loginUser, {loading}] = useMutation(LOGIN_USER, {
-        update(_, result) {
-            console.log('login user result: ', result);
+        update(_, {data: {login: userData}}) {
+            login(userData);
             history.push('/');
         },
         onError(err) {

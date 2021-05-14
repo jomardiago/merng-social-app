@@ -2,7 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
+import { AuthContext } from '../context/auth';
+
 function HeaderNav() {
+    const {user, logout} = React.useContext(AuthContext);
     const pathname = window.location.pathname === '/' ? 'home' : window.location.pathname.replace('/', '');
     const [activeItem, setActiveItem] = React.useState(pathname);
 
@@ -10,7 +13,23 @@ function HeaderNav() {
         setActiveItem(name);
     }
 
-    return (
+    const menuBar = user ? (
+        <Menu pointing secondary size="huge" color="teal">
+            <Menu.Item
+                name={user.username}
+                active
+                as={Link}
+                to='/'
+
+            />
+            <Menu.Menu position='right'>
+                <Menu.Item
+                    name='logout'
+                    onClick={logout}
+                />
+            </Menu.Menu>
+        </Menu>
+    ) : (
         <Menu pointing secondary size="huge" color="teal">
             <Menu.Item
                 name='home'
@@ -18,6 +37,7 @@ function HeaderNav() {
                 onClick={handleItemClick}
                 as={Link}
                 to='/'
+
             />
             <Menu.Menu position='right'>
                 <Menu.Item
@@ -36,8 +56,9 @@ function HeaderNav() {
                 />
             </Menu.Menu>
         </Menu>
-    )
+    );
 
+    return menuBar;
 }
 
 export default HeaderNav;
