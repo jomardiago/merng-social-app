@@ -14,10 +14,10 @@ export function validateRegisterInput({ username, email, password, confirmPasswo
         }
     }
 
-    if (password === '') {
+    if (password.trim() === '') {
         errors.password = 'Password is required';
-    } else if (confirmPassword.trim() === '') {
-        errors.confirmPassword = 'Passwords must match';
+    } else if (confirmPassword.trim !== '' && confirmPassword !== password) {
+        errors.password = 'Passwords must match';
     }
 
     return { errors, valid: Object.keys(errors).length < 1 };
