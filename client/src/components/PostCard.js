@@ -2,16 +2,15 @@ import React from 'react';
 import { Card, Image, Button, Icon, Label } from 'semantic-ui-react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/auth';
+import LikeButton from './LikeButton';
 
 function PostCard({ post }) {
     const { id, username, body, createdAt, likesCount, commentsCount, likes } = post;
+    const { user } = React.useContext(AuthContext);
 
-    function likePost() {
-        console.log('You liked post with id: ', id);
-    }
-
-    function commentOnPost() {
-        console.log('You want to comment on post with id: ', id);
+    function handleDeletePost() {
+        console.log('handleDeletePost hit!');
     }
 
     return (
@@ -29,22 +28,20 @@ function PostCard({ post }) {
                 </Card.Description>
             </Card.Content>
             <Card.Content extra>
-                <Button as='div' labelPosition='right'>
-                    <Button color='teal' basic onClick={likePost}>
-                        <Icon name='heart' />
-                    </Button>
-                    <Label basic color='teal' pointing='left'>
-                        {likesCount}
-                    </Label>
-                </Button>
-                <Button as='div' labelPosition='right'>
-                    <Button color='blue' basic onClick={commentOnPost}>
+                <LikeButton id={id} likes={likes} likesCount={likesCount} user={user} />
+                <Button labelPosition='right' as={Link} to={`/posts/${id}`}>
+                    <Button color='blue' basic>
                         <Icon name='comments' />
                     </Button>
                     <Label basic color='blue' pointing='left'>
                         {commentsCount}
                     </Label>
                 </Button>
+                { user?.username === username && (
+                    <Button as='div' color='red' onClick={handleDeletePost} floated='right'>
+                        <Icon name='trash' style={{ margin: 0 }} />
+                    </Button>
+                ) }
             </Card.Content>
         </Card>
     );

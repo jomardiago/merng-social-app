@@ -6,7 +6,8 @@ import { FETCH_POSTS } from '../util/graphql';
 
 function PostForm() {
     const [body, setBody] = React.useState('');
-    const [createPost, { error }] = useMutation(CREATE_POST, {
+    const [error, setError] = React.useState('');
+    const [createPost, { loading }] = useMutation(CREATE_POST, {
         variables: { body },
         update(proxy, result) {
             const data = proxy.readQuery({
@@ -21,6 +22,10 @@ function PostForm() {
             });
 
             setBody('');
+            setError('');
+        },
+        onError(err) {
+            setError(err.graphQLErrors[0].message);
         }
     });
 
@@ -34,15 +39,17 @@ function PostForm() {
     }
 
     return (
-        <Form onSubmit={handleSubmit} noValidate>
-            <h2>Create a post:</h2>
-            <Form.Field>
-                <Form.Input type='text' placeholder='Hi World!' name='body' onChange={handleChange} value={body} />
-                <Button type='submit' color='teal'>
-                    Submit
-                </Button>
-            </Form.Field>
-        </Form>
+        <>
+            <Form onSubmit={handleSubmit} noValidate>
+                <h2>Create a post:</h2>
+                <Form.Field>
+                    <Form.Input type='text' placeholder='Hi World!' name='body' onChange={handleChange} value={body} error={error !== '' ? error : undefined}/>
+                    <Button type='submit' color='teal'>
+                        Submit
+                    </Button>
+                </Form.Field>
+            </Form>
+        </>
     );
 }
 
