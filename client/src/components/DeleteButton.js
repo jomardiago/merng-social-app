@@ -4,26 +4,28 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import { FETCH_POSTS } from '../util/graphql';
 
-function DeleteButton({ postId, callback }) {
+function DeleteButton({ postId, commentId, callback }) {
     const [confirmOpen, setConfirmOpen] = React.useState(false);
 
-    const [deletePost] = useMutation(DELETE_POST, {
+    const [deleteEntity] = useMutation(commentId ? DELETE_COMMENT : DELETE_POST, {
         update(proxy) {
             setConfirmOpen(false);
 
-            const data = proxy.readQuery({
-                query: FETCH_POSTS
-            });
-            proxy.writeQuery({
-                query: FETCH_POSTS,
-                data: {
-                    getPosts: [...data.getPosts.filter(post => post.id !== postId)]
-                }
-            });
+            if (!commentId) {
+                const data = proxy.readQuery({
+                    query: FETCH_POSTS
+                });
+                proxy.writeQuery({
+                    query: FETCH_POSTS,
+                    data: {
+                        getPosts: [...data.getPosts.filter(post => post.id !== postId)]
+                    }
+                });
+            }
             
             if (callback) callback(); 
         },
-        variables: { postId }
+        variables: { postId, commentId }
     });
 
     function handleDeletePost() {
@@ -35,7 +37,7 @@ function DeleteButton({ postId, callback }) {
     }
 
     function handleConfirmDelete() {
-        deletePost();
+        deleteEntity();
     }
 
     return (
@@ -51,6 +53,21 @@ function DeleteButton({ postId, callback }) {
 const DELETE_POST = gql`
     mutation deletePost($postId: ID!) {
         deletePost(postId: $postId)
+    }
+`;
+
+const DELETE_COMMENT = gql`
+    mutation deleteComment($postId: ID!, $commentId: ID!) {
+        deleteComment(postId: $postId, commentId: $commentId) {
+            id
+            comments {
+                id
+                username
+                createdAt
+                body
+            }
+            commentsCount
+        }
     }
 `;
 
