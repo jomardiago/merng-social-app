@@ -21,4 +21,6 @@ mongoose.connect(config.mongoDbUrl, {
     return server.listen({ port: 5000 });    
 }).then(res => {
     console.log(`Server running at url ${res.url}`);
+}).catch(err => {
+    console.error(err);
 });
