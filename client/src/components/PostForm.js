@@ -7,7 +7,7 @@ import { FETCH_POSTS } from '../util/graphql';
 function PostForm() {
     const [body, setBody] = React.useState('');
     const [error, setError] = React.useState('');
-    const [createPost, { loading }] = useMutation(CREATE_POST, {
+    const [createPost] = useMutation(CREATE_POST, {
         variables: { body },
         update(proxy, result) {
             const data = proxy.readQuery({
